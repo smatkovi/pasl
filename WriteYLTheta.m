@@ -11,8 +11,11 @@ function [] = WriteYLTheta(filename)
 
         Theta = atan((x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2))/(x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1)));
 
+        L = sqrt((x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1))^2 + (x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2))^2);
+
         fprintf(fileID,'%f %f %f %f\n',X,Y,Theta,L);
     end
+    fclose(fileID);
     disp(U);
     
 end
