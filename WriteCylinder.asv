@@ -1,0 +1,15 @@
+function [] = WriteCylinder(numPanels)
+    fileID = fopen('cylinder.txt','w');
+    x = [0, -1];
+    fprintf(fileID,'%f %f\n', x);
+    theta = pi/4;
+    rot = [cos(theta) -sin(theta), [sin(theta), cos(theta)]];
+    for i = 1:numPanels-1
+        disp(size(rot));
+        disp(33);
+        disp(size(x));
+        disp(x);
+        x = rot.*x';
+        fprintf(fileID,'%f %f\n', x);
+    end
+end

@@ -54,5 +54,5 @@ function [M] = computeMFromXYLTheta(filename)
           M(i, j) = -sin(data(i, 4) - data(j, 4))*I(i, j)+cos(data(i, 4) - data(j, 4))*I(i, j);
       end
   end
+end  
 
-end
