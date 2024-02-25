@@ -1,4 +1,4 @@
-function [] = computeMFromXYLTheta(filename)
+function [M] = computeMFromXYLTheta(filename)
   % Open the file for reading
   fid = fopen(filename, 'r');
 
@@ -44,7 +44,8 @@ function [] = computeMFromXYLTheta(filename)
               I(i, j) = 0;
               J(i, j) = 0.5;
           else
-              I(i, j) = log(((data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2)/())
+              I(i, j) = log(((data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2)/((data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2))/(4*pi);
+              J(i, j) = atan((data(j, 3) - 2*xi(i, j))(2*eta(i, j)))
           end
       end
   end
