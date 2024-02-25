@@ -1,2 +1,1 @@
-# pasl
-# pasl
+the system matrix M is made by computeMFromXYLTheta. WriteCylinder creates a file with profile data for a cylinder. ComputeQFromM then solves the system of equations. getOptimalNumPanels combines these steps with an additional function computeMt to get v and should then compare with the exact value, which is not yet implemented. for the vortex assignment there is expandM, which expands M and also expands b. for the solution of the expanded matrix there is computeQFromMExp and what was getOptimalNumPanels was copied and rewritten to getQGammaCylinder.
