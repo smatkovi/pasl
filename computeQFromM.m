@@ -1,7 +1,8 @@
 function [q, ql] = computeQFromM(M, v, alpha)
     sizeM = size(M);
   % Open the file with XYLTheta for reading
-  fid = fopen("XYLTheta.txt", 'r');
+  filename = "YLTheta.txt";
+  fid = fopen(filename, 'r');
 
   % Check if file opened successfully
   if fid == -1
@@ -32,7 +33,10 @@ function [q, ql] = computeQFromM(M, v, alpha)
 
   % Close the file
     fclose(fid);
-    b = -ones(sizeM(1),1)*v*sin(ones(sizeM(1),1)*alpha-data(1:sizeM(1),4));
+    b = zeros(sizeM(1),1);
+    for i = 1:sizeM(1)
+        b(i) = v*sin(alpha - data(i, 4));
+    end
     q = linsolve(M, b);
-    ql = q*data(1:sizeM(1),3);
+    ql = q.*data(1:sizeM(1),3);
 end
