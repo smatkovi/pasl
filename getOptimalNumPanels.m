@@ -1,13 +1,13 @@
 function [numPanels] = getOptimalNumPanels()
     numPanels = 8;
     WriteCylinder(numPanels);
-    WriteXYLTheta(cylinder.txt);
+    WriteXYLTheta("cylinder.txt");
     M = computeMFromXYLTheta("XYLTheta.txt");
     vInf = 50;
     alpha = pi/18;
-    q= computeQFromM(M, vInf, alpha);
+    q = computeQFromM(M, vInf, alpha);
 
-      filename = "YLTheta.txt";
+      filename = "XYLTheta.txt";
   fid = fopen(filename, 'r');
 
   % Check if file opened successfully
@@ -41,7 +41,21 @@ function [numPanels] = getOptimalNumPanels()
     fclose(fid);
 
     Mt = computeMTFromXYLTheta("XYLTheta.txt");
-    v = Mt.*q + vInf*cos(alpha - data(1:numLines-1,4));
-    cp = 1 - (v/vInf)^2;
+    sizeMt = size(Mt);
+    %helpVect = zeros(sizeMt(1), 1);
+    sizeQ = size(q);
+    v = zeros(sizeMt(1), 1);
+    cp = zeros(sizeMt(1), 1);
+    for i = 1:sizeMt(1)
+        for j = 1:sizeQ(1)
+            %helpVect(i) = vInf*cos(alpha - data(i, 4));
+            v(i) = v(i) + Mt(i, j)*q(j);
+        end
+        v(i) = v(i) + vInf*cos(alpha - data(i, 4));
+        cp(i) = 1 - (v(i)/vInf)^2;
+    end
+    
+    %v = Mt.*q + helpVect;
+    disp(v);
     disp(cp);
 end
