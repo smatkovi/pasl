@@ -1,5 +1,5 @@
 function [M] = computeMFromXYLTheta(filename)
-  % Open the file for reading
+  % Open the file with XYLTheta for reading
   fid = fopen(filename, 'r');
 
   % Check if file opened successfully
@@ -14,7 +14,10 @@ function [M] = computeMFromXYLTheta(filename)
     numLines = numLines + 1;
     tline = fgetl(fid);
   end
-  rewind(fid); % Go back to the beginning of the file
+
+  % Close the file and reopen to reset the file pointer
+  fclose(fid);
+  fid = fopen(filename, 'r');
 
   % Pre-allocate memory for the matrix with 4 rows
   data = zeros(numLines, 4);
