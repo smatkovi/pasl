@@ -52,7 +52,7 @@ function [] = getQGammaCylinder(t)
             %helpVect(i) = vInf*cos(alpha - data(i, 4));
             v(i) = v(i) + Mt(i, j)*q(j) - q(sizeQ(1))*M(i, j);
         end
-        v(i) = v(i) + vInf*cos(alpha - data(i, 4));
+        v(i) = v(i) + vInf*cos(alpha);
         ca(i) = ((v(i)/vInf)^2)/t * cos(alpha - data(i, 4))*data(i, 3);
     end
     
