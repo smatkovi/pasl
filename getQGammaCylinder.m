@@ -46,13 +46,16 @@ function [] = getQGammaCylinder(t)
     %helpVect = zeros(sizeMt(1), 1);
     sizeQ = size(q);
     v = zeros(sizeMt(1), 1);
+    vY = zeros(sizeMt(1), 1);
     ca = zeros(sizeMt(1), 1);
     for i = 1:sizeMt(1)
         for j = 1:sizeQ(1)
             %helpVect(i) = vInf*cos(alpha - data(i, 4));
             v(i) = v(i) + Mt(i, j)*q(j) - q(sizeQ(1))*M(i, j);
+            vY(i) = vY(i) + Mt(i, j)*q(j) + q(sizeQ(1))*M(i, j);
         end
         v(i) = v(i) + vInf*cos(alpha);
+        vY(i) = vY(i) + vInf*sin(alpha);
         ca(i) = ((v(i)/vInf)^2)/t * cos(alpha - data(i, 4))*data(i, 3);
     end
     
