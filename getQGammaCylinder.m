@@ -2,7 +2,7 @@ function [] = getQGammaCylinder(t)
     numPanels = 8;
     WriteCylinder(numPanels);
     WriteXYLTheta("cylinder.txt");
-    M = computeMFromXYLTheta("XYLTheta.txt");
+    M = computeMCurlFromXYLTheta("XYLTheta.txt", "cylinder.txt");
     vInf = 50;
     alpha = pi/18;
     [MExp, bExp] = expandM(M, vInf, alpha);
@@ -41,7 +41,7 @@ function [] = getQGammaCylinder(t)
   % Close the file
     fclose(fid);
 
-    Mt = computeMTFromXYLTheta("XYLTheta.txt");
+    Mt = computeMTCurlFromXYLTheta("XYLTheta.txt");
     sizeMt = size(Mt);
     %helpVect = zeros(sizeMt(1), 1);
     sizeQ = size(q);
