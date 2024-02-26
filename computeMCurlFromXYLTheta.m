@@ -52,7 +52,7 @@ function [M] = computeMCurlFromXYLTheta(filenamei, filename2)
               J(i, j) = atan((data(j, 3) - 2*xi(i, j))/(2*eta(i, j)))/(2*pi) + atan((data(j, 3) + 2*xi(i, j))/(2*eta(i, j)))/(2*pi);
           end
 
-          M(i, j) = -sin(data(i, 4) - data(j, 4))*I(i, j)+cos(data(i, 4) - data(j, 4))*I(i, j);
+          M(i, j) = -sin( - data(j, 4))*I(i, j)+cos( - data(j, 4))*I(i, j);
       end
   end
 end  
