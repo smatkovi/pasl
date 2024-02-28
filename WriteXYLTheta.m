@@ -16,6 +16,7 @@ function [] = WriteXYLTheta(filename)
         fprintf(fileID,'%f %f %f %f\n',X,Y,L,Theta);
     end
 
+    U = U + sqrt( (x(sizeX(1)-1, 1) - x(sizeX(1)-2, 1))^2 + (x(sizeX(1)-1, 2) - x(sizeX(1)-2, 2))^2);
     U = U + sqrt( (x(sizeX(1), 1) - x(sizeX(1)-1, 1))^2 + (x(sizeX(1), 2) - x(sizeX(1)-1, 2))^2);
 
     fclose(fileID);

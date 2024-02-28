@@ -1,5 +1,5 @@
-function [numPanels] = getOptimalNumPanels()
-    numPanels = 8;
+function [] = getOptimalNumPanels(numPanels)
+    %numPanels = 8;
     WriteCylinder(numPanels);
     WriteXYLTheta("cylinder.txt");
     M = computeMFromXYLTheta("XYLTheta.txt");
@@ -46,6 +46,8 @@ function [numPanels] = getOptimalNumPanels()
     sizeQ = size(q);
     v = zeros(sizeMt(1), 1);
     cp = zeros(sizeMt(1), 1);
+    phi = zeros(sizeMt(1), 1);
+    %cpPhi = zeros(sizeMt(1), 1);
     for i = 1:sizeMt(1)
         for j = 1:sizeQ(1)
             %helpVect(i) = vInf*cos(alpha - data(i, 4));
@@ -53,9 +55,13 @@ function [numPanels] = getOptimalNumPanels()
         end
         v(i) = v(i) + vInf*cos(alpha - data(i, 4));
         cp(i) = 1 - (v(i)/vInf)^2;
+        phi(i) = q(i)*data(i, 3)*log(data(i, 3))/(2*pi);
+        %cpPhi(i) = 2*cos(2*phi(i));
     end
-    
+    %phi = phi - sin(alpha)*vInf;
     %v = Mt.*q + helpVect;
-    disp(v);
-    disp(cp);
+    %%disp(v);
+    disp(cp(1));
+    disp(cp(2));
+    disp(2*cos(2*(sum(phi)- (sin(alpha)*vInf))) - 1);
 end
