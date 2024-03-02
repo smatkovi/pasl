@@ -1,11 +1,11 @@
-function [numPanels] = getOptimalNumPanels()
-    numPanels = 8;
+function [] = getOptimalNumPanels(numPanels)
+    %numPanels = 8;
     WriteCylinder(numPanels);
     WriteXYLTheta("cylinder.txt");
     M = computeMFromXYLTheta("XYLTheta.txt");
     vInf = 50;
     alpha = pi/18;
-    q= computeQFromM(M, vInf, alpha);
+    q = computeQFromM(M, vInf, alpha);
 
       filename = "XYLTheta.txt";
   fid = fopen(filename, 'r');
@@ -42,18 +42,27 @@ function [numPanels] = getOptimalNumPanels()
 
     Mt = computeMTFromXYLTheta("XYLTheta.txt");
     sizeMt = size(Mt);
-    helpVect = zeros(sizeMt(1), 1);
+    %helpVect = zeros(sizeMt(1), 1);
     sizeQ = size(q);
     v = zeros(sizeMt(1), 1);
+    cp = zeros(sizeMt(1), 1);
+    phi = zeros(sizeMt(1), 1);
+    %cpPhi = zeros(sizeMt(1), 1);
     for i = 1:sizeMt(1)
         for j = 1:sizeQ(1)
-            helpVect(i) = vInf*cos(alpha - data(i, 4));
-            v(i) = v(i) + Mt(i, j)*q(j) + 
+            %helpVect(i) = vInf*cos(alpha - data(i, 4));
+            v(i) = v(i) + Mt(i, j)*q(j);
         end
+        v(i) = v(i) + vInf*cos(alpha - data(i, 4));
+        cp(i) = 1 - (v(i)/vInf)^2;
+        phi(i) = q(i)*data(i, 3)*log(data(i, 3))/(2*pi);
+        %cpPhi(i) = 2*cos(2*phi(i));
     end
-    v = Mt.*q + helpVect;
-    disp(v);
-    cp = 1 - (v/vInf).^2;
-    disp(size(cp));
-    disp(cp);
+    %phi = phi - sin(alpha)*vInf;
+    phi = - (sin(alpha)*vInf) + sum(phi) );
+    %v = Mt.*q + helpVect;
+    %%disp(v);
+    disp(cp(1));
+    %disp(sum(cp));
+    disp(2*cos(2*(- (sin(alpha)*vInf) + sum(phi) ))- 1);
 end

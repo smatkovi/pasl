@@ -59,9 +59,10 @@ function [] = getOptimalNumPanels(numPanels)
         %cpPhi(i) = 2*cos(2*phi(i));
     end
     %phi = phi - sin(alpha)*vInf;
+    phiTot = - (sin(alpha)*vInf) + sum(phi) ;
     %v = Mt.*q + helpVect;
     %%disp(v);
     disp(cp(1));
-    disp(cp(2));
-    disp(2*cos(2*(sum(phi)- (sin(alpha)*vInf))) - 1);
+    %disp(sum(cp));
+    disp(2*cos(2*(phiTot)- 1));
 end
