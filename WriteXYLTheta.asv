@@ -2,9 +2,7 @@ function [] = WriteXYLTheta(filename)
     x = readFileData(filename);
     U = 0;
     sizeX = size(x);
-    if atan2(x(2,2)-x(1,2), x(2,1)-x(1,1)) < 0
-        disp("alert: first panel suggests clockwise order of points,\n should be counterclockwise (mathematically positive)");
-    end
+    if
     fileID = fopen('XYLTheta.txt','w');
     for i = 1:sizeX(1)-2
         U = U + sqrt( (x(i+1, 1) - x(i, 1))^2 + (x(i+1, 2) - x(i, 2))^2);
