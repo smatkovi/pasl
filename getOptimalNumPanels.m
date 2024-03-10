@@ -79,7 +79,7 @@ function [] = getOptimalNumPanels(numPanels)
 
     fileID = fopen('cps.txt','w');
     for i = 1:sizeQ(1)
-        fprintf(fileID,'%f %f\n', cp(i), disp(2*cos(2*(phiTot(i))- 1)));
+        fprintf(fileID,'%f %f\n', cp(i), 2*cos(2*(phiTot(i))- 1));
     end
     fclose(fileID);
 end
