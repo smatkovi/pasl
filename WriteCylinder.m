@@ -14,4 +14,5 @@ function [] = WriteCylinder(numPanels)
         x = rot*x;
         fprintf(fileID,'%f %f\n', x);
     end
+    fclose(fileID);
 end
