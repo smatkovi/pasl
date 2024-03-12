@@ -58,14 +58,14 @@ function [] = getOptimalNumPanels(numPanels)
         end
         v(i) = v(i) + vInf*cos(alpha - data(i, 4));
         cp(i) = 1 - (v(i)/vInf)^2;
-        r = sqrt((1 - x(i, 1))^2 + (0 - x(i, 2))^2);
-        %l = l + data(i, 3);
-        if i>1
-            l = l + data(i-1, 3);
-            phi(i) = q(i)*l*log(r)/(4*pi); %int(f(x), dx, a, b) = (b-a)f(a+b)/2
+        l = data(i, 3);
+        r = l;
+        %if i>1
+            %l = l + data(i-1, 3);
+        phi(i) = q(i)*l*log(r)/(2*pi); %int(f(x), dx, a, b) = (b-a)f(a+b)/2
             %phi(i) = q(i)*data(i, 3)*log(data(i, 3))/(2*pi);
             %cpPhi(i) = 2*cos(2*phi(i));
-        end
+        %end
     end
     %phi = phi - sin(alpha)*vInf;
     for i = 1:sizeQ(1)
@@ -73,7 +73,7 @@ function [] = getOptimalNumPanels(numPanels)
     end
     %v = Mt.*q + helpVect;
     %%disp(v);
-    disp(cp(1));
+    %disp(cp(1));
     %disp(sum(cp));
     disp(2*cos(2*(phiTot)- 1));
 
