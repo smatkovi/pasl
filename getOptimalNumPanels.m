@@ -59,27 +59,28 @@ function [] = getOptimalNumPanels(numPanels)
         v(i) = v(i) + vInf*cos(alpha - data(i, 4));
         cp(i) = 1 - (v(i)/vInf)^2;
         l = data(i, 3);
-        r = l;
+        %r = l;
         %if i>1
             %l = l + data(i-1, 3);
-        phi(i) = q(i)*l*log(r)/(2*pi); %int(f(x), dx, a, b) = (b-a)f(a+b)/2
+        %phi(i) = q(i)*l*log(r)/(2*pi); %int(f(x), dx, a, b) = (b-a)f(a+b)/2
             %phi(i) = q(i)*data(i, 3)*log(data(i, 3))/(2*pi);
             %cpPhi(i) = 2*cos(2*phi(i));
         %end
     end
     %phi = phi - sin(alpha)*vInf;
-    for i = 1:sizeQ(1)
-        phiTot(i) = cos(alpha)*vInf*x(i, 1) + sum(phi) + (sin(alpha)*vInf)*x(i, 2);
-    end
+    %for i = 1:sizeQ(1)
+     %   phiTot(i) = cos(alpha)*vInf*x(i, 1) + sum(phi) + (sin(alpha)*vInf)*x(i, 2);
+    %end
     %v = Mt.*q + helpVect;
     %%disp(v);
     %disp(cp(1));
     %disp(sum(cp));
     %disp(2*cos(2*(phiTot)- 1));
-
+    angle = 0;
     fileID = fopen('cps.txt','w');
     for i = 1:sizeQ(1)
-        fprintf(fileID,'%f %f\n', cp(i), 2*cos(2*(phiTot(i))- 1));
+        fprintf(fileID,'%f %f\n', cp(i), 2*cos(2*(angle)- 1));
+        angle = angle + 2*pi/numPanels;
     end
     fclose(fileID);
 end
