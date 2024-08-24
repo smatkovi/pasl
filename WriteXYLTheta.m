@@ -19,7 +19,7 @@ function [] = WriteXYLTheta(filename)
             X = (x(1, 1) + x(sizeX(1), 1))/2;
             Y = (x(1, 2) + x(sizeX(1), 2))/2;
             %Theta = atan((x(sizeX(1), 2) - x(sizeX(1)-i, 2))/(x(sizeX(1), 1) - x(sizeX(1)-i, 1)));
-            Theta = atan((x(sizeX(1), 1) - x(sizeX(1)-i, 1)), (x(sizeX(1), 2) - x(sizeX(1)-i, 2)));
+            Theta = atan2((x(sizeX(1), 1) - x(sizeX(1)-i, 1)), (x(sizeX(1), 2) - x(sizeX(1)-i, 2)));
             L = sqrt((x(sizeX(1), 1) - x(sizeX(1)-i, 1))^2 + (x(sizeX(1), 2) - x(sizeX(1)-i, 2))^2);
         end
         
