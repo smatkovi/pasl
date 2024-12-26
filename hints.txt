@@ -1,0 +1,36 @@
+Stefan Braun <stefan.braun@tuwien.ac.at>
+	
+Mi., 17. Apr., 12:58
+	
+an mich
+Sehr geehrter Herr Matkovich,
+
+grundsätzlich ist es natürlich sinnvoll, auf 1m/s Anströmgeschwindigkeit (und Profiltiefe 1m) Bezug zu nehmen, das entspricht dann auch den Werten für die dimensionslose Formulierung...
+
+Hier die entsprechenden Werte für den Zylinder mit 8 Panels zum Vergleich (bei Ihnen scheint die Dimension nicht übereinzustimmen):
+
+i        qi           vi(t)      cpi
+0     -2.19     -0.77     0.41
+1     -0.91     -1.85     -2.41
+2     0.91      -1.85      -2.41
+3     2.19      -0.77     0.41
+4     2.19       0.77     0.41
+5     0.91       1.85     -2.41
+6     -0.91      1.85     -2.41
+7     -2.19      0.77     0.41
+
+zugehörige 8x8 Matrix M (gerundet):
+
+ 0.5  0.056 0.064 0.065 0.065 0.065 0.064 0.056
+ 0.056 0.5 0.056 0.064 0.065 0.065 0.065 0.064
+ 0.064 0.056 0.5 0.056 0.064 0.065 0.065 0.065
+ 0.065 0.064 0.056 0.5 0.056 0.064 0.065 0.065
+ 0.065 0.065 0.064 0.056 0.5 0.056 0.064 0.065
+ 0.065 0.065 0.065 0.064 0.056 0.5 0.056 0.064
+ 0.064 0.065 0.065 0.065 0.064 0.056 0.5 0.056
+ 0.056 0.064 0.065 0.065 0.065 0.064 0.056 0.5
+
+Vielleicht hilft Ihnen das bei der Fehlersuche weiter...
+
+Beste Grüße,
+Stefan Braun

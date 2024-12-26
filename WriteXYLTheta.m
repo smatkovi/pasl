@@ -13,13 +13,20 @@ function [] = WriteXYLTheta(filename)
         if i < sizeX(1)-1
             X = (x(sizeX(1)-i, 1) + x(sizeX(1)-i-1, 1))/2;
             Y = (x(sizeX(1)-i, 2) + x(sizeX(1)-i-1, 2))/2;
-            Theta = atan((x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2))/(x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1)));
+            Theta = atan2((x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2)), (x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1)));
+            if atan2((x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1)), (x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2))) < 0
+                %Theta = Theta*(-1);
+            end
+            disp(Theta);
             L = sqrt((x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1))^2 + (x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2))^2);
         else 
             X = (x(1, 1) + x(sizeX(1), 1))/2;
             Y = (x(1, 2) + x(sizeX(1), 2))/2;
-            %Theta = atan((x(sizeX(1), 2) - x(sizeX(1)-i, 2))/(x(sizeX(1), 1) - x(sizeX(1)-i, 1)));
-            Theta = atan2((x(sizeX(1), 1) - x(sizeX(1)-i, 1)), (x(sizeX(1), 2) - x(sizeX(1)-i, 2)));
+            Theta = atan2((x(sizeX(1), 2) - x(sizeX(1)-i, 2)), (x(sizeX(1), 1) - x(sizeX(1)-i, 1)));
+            if atan2((x(sizeX(1), 1) - x(sizeX(1)-i, 1)), (x(sizeX(1), 2) - x(sizeX(1)-i, 2))) < 0
+                %Theta = Theta*(-1);
+            end
+            disp(Theta);
             L = sqrt((x(sizeX(1), 1) - x(sizeX(1)-i, 1))^2 + (x(sizeX(1), 2) - x(sizeX(1)-i, 2))^2);
         end
         
