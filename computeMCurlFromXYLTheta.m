@@ -1,4 +1,4 @@
-function [M] = computeMCurlFromXYLTheta(filenamei, filename2)
+function [M] = computeMCurlFromXYLTheta(filename, filename2)
   % Open the file with XYLTheta for reading
   fid = fopen(filename, 'r');
 
@@ -32,7 +32,7 @@ function [M] = computeMCurlFromXYLTheta(filenamei, filename2)
   % Close the file
   fclose(fid);
 
-  panel = readFiledata(filename2);
+  panel = readFileData(filename2);
   xi = zeros(numLines, numLines);
   eta = zeros(numLines, numLines);
   I = zeros(numLines, numLines);

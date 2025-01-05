@@ -2,5 +2,5 @@ set style data lines
 set style line 1 lc rgb 'orange'
 set style line 1 lc rgb 'purple''
 set title "Data from cps.txt"
- set xlabel "Panels"
+ set xlabel "Panel"
  plot "cps.txt" using 0:1 ls 1 title 'c_p'

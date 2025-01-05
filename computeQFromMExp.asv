@@ -20,7 +20,7 @@ function [q, ql] = computeQFromMExp(MExp, bExp)
    fid = fopen(filename, 'r');
 
   % Pre-allocate memory for the matrix with 4 rows
-  data = zeros(numLines+1, 4);
+  data = zeros(numLines, 4);
 
   % Read values and store them in the matrix
   i = 1;

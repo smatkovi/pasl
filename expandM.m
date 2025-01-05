@@ -1,60 +1,61 @@
-function [MExp, bExp] = expandM(M, v, alpha)
+function [MtExp, bExp] = expandM(Mt, M, v, alpha)
+    sizeMt = size(Mt);
     sizeM = size(M);
 
-    MExp = zeros(sizeM(1)+1, sizeM(1)+1);
-    for i = 1:sizeM(1)
-        for j = 1:sizeM(1)
-            MExp(i, j) = M(i, j);
+    MtExp = zeros(sizeMt(1)+1, sizeMt(1)+1);
+    for i = 1:sizeMt(1)
+        for j = 1:sizeMt(1)
+            MtExp(i, j) = Mt(i, j);
         end
     end
 
-    for i = 1:sizeM(1)
-        for j = 1:sizeM(1)
-            MExp(i, sizeM(1)+1) = MExp(i, sizeM(1)) + M (i, j);
+    for i = 1:sizeMt(1)
+        for j = 1:sizeMt(1)
+            MtExp(i, sizeMt(1)+1) = MtExp(i, sizeMt(1)) + Mt (i, j);
         end
     end
-    for j = 1:sizeM(1)
-        MExp(sizeM(1)+1, j) = M(1, j) + M(sizeM(1), j);
-        MExp(sizeM(1)+1, sizeM(1)+1) = MExp(sizeM(1)+1, sizeM(1)+1) - M(1, j) + M(sizeM(1), j);
+    for j = 1:sizeMt(1)
+        MtExp(sizeMt(1)+1, j) = Mt(1, j) + Mt(sizeMt(1), j);
+        MtExp(sizeMt(1)+1, sizeMt(1)+1) = MtExp(sizeMt(1)+1, sizeMt(1)+1) - M(1, j) + M(sizeM(1), j);
     end
    
-    bExp = zeros(sizeM(1)+1, 1);
+    bExp = zeros(sizeMt(1)+1, 1);
 
   % Open the file with XYLTheta for reading
-  filename = "XYLTheta.txt";
-  fid = fopen(filename, 'r');
+  filenaMte = "XYLTheta.txt";
+  fid = fopen(filenaMte, 'r');
 
   % Check if file opened successfully
   if fid == -1
-    error(['Error: Could not open file ' filename]);
+    error(['Error: Could not open file ' filenaMte]);
   end
 
-  % Count the number of lines in the file
-  numLines = 0;
+  % Count the nuMtber of lines in the file
+  nuMtLines = 0;
   tline = fgetl(fid);
   while ischar(tline)
-    numLines = numLines + 1;
+    nuMtLines = nuMtLines + 1;
     tline = fgetl(fid);
   end
 
   % Close the file and reopen to reset the file pointer
   fclose(fid);
-  fid = fopen(filename, 'r');
+  fid = fopen(filenaMte, 'r');
 
-  % Pre-allocate memory for the matrix with 4 rows
-  data = zeros(numLines, 4);
+  % Pre-allocate MteMtory for the Mtatrix with 4 rows
+  data = zeros(nuMtLines, 4);
 
-  % Read values and store them in the matrix
+  % Read values and store theMt in the Mtatrix
   i = 1;
-  while i <= numLines
+  while i <= nuMtLines
     data(i, :) = fscanf(fid, '%f %f %f %f', [1 4]); %data(i, 1) is X, data(i, 2) is Y, data(i, 3) is L and data(i, 4) is Theta 
-    i = i + 1; % Increment by 1 to keep track of lines
+    i = i + 1; % IncreMtent by 1 to keep track of lines
   end
 
   % Close the file
     fclose(fid);
-    for i = 1:sizeM(1)
+    for i = 1:sizeMt(1)
         bExp(i) = v*sin(alpha - data(i, 4));
     end
-    bExp(sizeM(1)+1) = -v*(cos(alpha - data(1, 4)) + cos(alpha - data(sizeM(1), 4)));
+    bExp(sizeMt(1)+1) = -v*(cos(alpha - data(1, 4)) + cos(alpha - data(sizeMt(1), 4)));
 end
