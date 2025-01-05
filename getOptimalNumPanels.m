@@ -1,5 +1,5 @@
-function [] = getOptimalNumPanels()
-    numPanels = 8;
+function [] = getOptimalNumPanels(numPanels)
+    %numPanels = 8;
     WriteCylinder(numPanels);
     WriteXYLTheta("cylinder.txt");
     M = computeMFromXYLTheta("XYLTheta.txt");
@@ -76,11 +76,11 @@ function [] = getOptimalNumPanels()
     %disp(cp(1));
     %disp(sum(cp));
     %disp(2*cos(2*(phiTot)- 1));
-    angle = 0;
+    angle = pi/4;
     fileID = fopen('cps.txt','w');
     for i = 1:sizeQ(1)
-        fprintf(fileID,'%f %f\n', cp(i), 2*cos(2*(angle) + pi/24));
-        angle = angle + 2*pi/numPanels;
+        fprintf(fileID,'%f %f\n', cp(i), 2*(cos(2*angle)) - 1);
+        angle = angle + (2*pi)/numPanels;
     end
     fclose(fileID);
     disp("q");
