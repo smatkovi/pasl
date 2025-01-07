@@ -1,4 +1,4 @@
-function [] = WriteXYLTheta(filename)
+function [t] = WriteXYLTheta(filename)
     x = readFileData(filename);
     U = 0;
     %dimdisp(x);
@@ -38,5 +38,5 @@ function [] = WriteXYLTheta(filename)
 
     fclose(fileID);
     disp(U);
-    
+    t = max(x(:, 1)) - min(x(:, 1));
 end

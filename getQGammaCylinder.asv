@@ -1,12 +1,14 @@
 function [] = getQGammaCylinder(panels)
     numPanels = panels;
-    t=1;
+    t=1; %Profiltiefe
     WriteCylinder(numPanels);
     WriteXYLTheta("cylinder.txt");
     M = computeMCurlFromXYLTheta("XYLTheta.txt", "cylinder.txt");
+    Mt = computeMTCurlFromXYLTheta("XYLTheta.txt");
     vInf = 1;
-    alpha = 0;
-    [MExp, bExp] = expandM(M, vInf, alpha);
+    alpha = ;
+    [MExp, bExp] = expandM(Mt, M, vInf, alpha);
+    sizeMExp=size(MExp);
     q = computeQFromMExp(MExp, bExp);
 
       filename = "XYLTheta.txt";
@@ -46,11 +48,11 @@ function [] = getQGammaCylinder(panels)
     sizeMt = size(Mt);
     %helpVect = zeros(sizeMt(1), 1);
     sizeQ = size(q);
-    v = zeros(sizeMt(1), 1);
-    vY = zeros(sizeMt(1), 1);
-    ca = zeros(sizeMt(1), 1);
+    v = zeros(sizeMExp(1), 1);
+    vY = zeros(sizeMExp(1), 1);
+    ca = zeros(sizeMExp(1), 1);
     for i = 1:sizeMt(1)
-        for j = 1:sizeQ(1)
+        for j = 1:sizeQ(1)-1
             %helpVect(i) = vInf*cos(alpha - data(i, 4));
             v(i) = v(i) + Mt(i, j)*q(j) - q(sizeQ(1))*M(i, j);
             vY(i) = vY(i) + Mt(i, j)*q(j) + q(sizeQ(1))*M(i, j);
@@ -61,11 +63,16 @@ function [] = getQGammaCylinder(panels)
     end
     
     %v = Mt.*q + helpVect;
-    disp(v);
-    disp(ca);
+    disp(v)
+    disp("ca:")
+    disp(ca)
     fileID = fopen('cpscas.txt','w');
+    cp = zeros(sizeMExp(1), 1);
     for i = 1:sizeQ(1)
-        fprintf(fileID,'%f %f\n', cp(i), ca(i));
+        cp(i) = 1 - (v(i)/vInf)^2;
+        fprintf(fileID,'%f\n', cp(i));
     end
+    c_a = sum(ca);
+    disp(c_a)
     fclose(fileID);
 end

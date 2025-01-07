@@ -9,7 +9,7 @@ function [data] = readFileData(filename)
   end
 
   % Read the first line to get the number of values
-  numValues = fscanf(fid, '%d', 1) + 1;
+  numValues = fscanf(fid, '%d', 1)  + 1;
 
   % Pre-allocate memory for the matrix to improve efficiency
   data = zeros(numValues, 2);

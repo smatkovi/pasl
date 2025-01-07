@@ -1,9 +1,6 @@
-function [] = getQGammaCylinder(panels)
-    numPanels = panels;
-    t=1; %Profiltiefe
-    WriteCylinder(numPanels);
-    WriteXYLTheta("cylinder.txt");
-    M = computeMCurlFromXYLTheta("XYLTheta.txt", "cylinder.txt");
+function [] = getQGammaProfile(filenameProfile)
+    t=WriteXYLTheta(filenameProfile);
+    M = computeMCurlFromXYLTheta("XYLTheta.txt", filenameProfile);
     Mt = computeMTCurlFromXYLTheta("XYLTheta.txt");
     vInf = 1;
     alpha = 0;
