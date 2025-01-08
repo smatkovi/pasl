@@ -14,29 +14,21 @@ function [t] = WriteXYLTheta(filename)
             X = (x(sizeX(1)-i, 1) + x(sizeX(1)-i-1, 1))/2;
             Y = (x(sizeX(1)-i, 2) + x(sizeX(1)-i-1, 2))/2;
             Theta = atan2((x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2)), (x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1)));
-            if atan2((x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1)), (x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2))) < 0
-                %Theta = Theta*(-1);
-            end
-            disp(Theta);
             L = sqrt((x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1))^2 + (x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2))^2);
         else 
             X = (x(1, 1) + x(sizeX(1), 1))/2;
             Y = (x(1, 2) + x(sizeX(1), 2))/2;
             Theta = atan2((x(sizeX(1), 2) - x(sizeX(1)-i, 2)), (x(sizeX(1), 1) - x(sizeX(1)-i, 1)));
-            if atan2((x(sizeX(1), 1) - x(sizeX(1)-i, 1)), (x(sizeX(1), 2) - x(sizeX(1)-i, 2))) < 0
-                %Theta = Theta*(-1);
-            end
-            disp(Theta);
             L = sqrt((x(sizeX(1), 1) - x(sizeX(1)-i, 1))^2 + (x(sizeX(1), 2) - x(sizeX(1)-i, 2))^2);
         end
         
         fprintf(fileID,'%f %f %f %f\n',X,Y,L,Theta);
     end
 
-    U = U + sqrt( (x(sizeX(1)-1, 1) - x(sizeX(1)-2, 1))^2 + (x(sizeX(1)-1, 2) - x(sizeX(1)-2, 2))^2);
+    %U = U + sqrt( (x(sizeX(1)-1, 1) - x(sizeX(1)-2, 1))^2 + (x(sizeX(1)-1, 2) - x(sizeX(1)-2, 2))^2);
     U = U + sqrt( (x(sizeX(1), 1) - x(sizeX(1)-1, 1))^2 + (x(sizeX(1), 2) - x(sizeX(1)-1, 2))^2);
 
     fclose(fileID);
-    disp(U);
+    %disp(U);
     t = max(x(:, 1)) - min(x(:, 1));
 end

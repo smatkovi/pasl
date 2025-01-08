@@ -9,10 +9,10 @@ function [data] = readFileData(filename)
   end
 
   % Read the first line to get the number of values
-    numValues = 0;
+    numLines = 0;
   tline = fgetl(fid);
   while ischar(tline)
-    numValues = numValues + 1;
+    numLines = numLines + 1;
     tline = fgetl(fid);
   end
 

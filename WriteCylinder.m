@@ -1,7 +1,7 @@
 function [] = WriteCylinder(numPanels)
     fileID = fopen('cylinder.txt','w');
     x = [0.5; 0];
-    fprintf(fileID,'%d\n', numPanels-1);
+    %fprintf(fileID,'%d\n', numPanels-1);
     fprintf(fileID,'%f %f\n', x);
     theta = 2*pi/numPanels;
     rot = zeros(2, 2);

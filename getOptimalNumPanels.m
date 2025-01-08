@@ -87,5 +87,7 @@ function [] = getOptimalNumPanels(numPanels)
     disp(q);
     disp("v");
     disp(v);
+    disp("cp");
+    disp(cp)
     disp(M);
 end

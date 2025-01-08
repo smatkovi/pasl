@@ -35,8 +35,8 @@ function [q, ql] = computeQFromM(M, v, alpha)
     fclose(fid);
     b = zeros(sizeM(1),1);
     for i = 1:sizeM(1)
-        b(i) = v*sin(alpha - data(i, 4));
+        b(i) = -v*sin(alpha - data(i, 4));
     end
-    q = linsolve(M, b);
+    q = mldivide(M, b);
     ql = q.*data(1:sizeM(1),3);
 end
