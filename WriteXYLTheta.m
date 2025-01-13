@@ -8,7 +8,9 @@ function [t] = WriteXYLTheta(filename)
     end
     fileID = fopen('XYLTheta.txt','w');
     disp(sizeX);
+
     for i = 0:sizeX(1)-1
+        %i = sizeX(1)-k-1;
         %U = U + sqrt( (x(i+1, 1) - x(i, 1))^2 + (x(i+1, 2) - x(i, 2))^2);
         if i < sizeX(1)-1
             X = (x(sizeX(1)-i, 1) + x(sizeX(1)-i-1, 1))/2;

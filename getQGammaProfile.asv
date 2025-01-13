@@ -3,7 +3,7 @@ function [] = getQGammaProfile(filenameProfile)
     M = computeMCurlFromXYLTheta("XYLTheta.txt", filenameProfile);
     Mt = computeMTCurlFromXYLTheta("XYLTheta.txt");
     vInf = 1;
-    alpha = 10*pi/180;
+    alpha = 0*10*pi/180;
     [MExp, bExp] = expandM(Mt, M, vInf, alpha);
     sizeMExp=size(MExp);
     q = computeQFromMExp(MExp, bExp);
@@ -87,11 +87,10 @@ function [] = getQGammaProfile(filenameProfile)
     disp(c_a)
     fclose(fileID);
     fileID = fopen('cps2.txt','w');
-    j=0;
-    for k = separator+1:sizeQ(1)-1
-        i = sizeQ(1)-j-1;
+    
+    for k = separator:sizeQ(1)
+        i = sizeQ(1)-k;
         cp(i) = 1 - (v(i)/vInf)^2;
         fprintf(fileID,'%f\n', cp(i));
-        j = j + 1;
     end
     fclose(fileID);
