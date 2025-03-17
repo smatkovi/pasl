@@ -34,7 +34,7 @@ function [] = getOptimalNumPanels(numPanels)
   % Read values and store them in the matrix
   i = 1;
   while i <= numLines
-    data(i, :) = fscanf(fid, '%f %f %f %f', [1 4]); %data(i, 1) is X, data(i, 2) is Y, data(i, 3) is L and data(i, 4) is Theta 
+    data(i, :) = fscanf(fid, '%e %e %e %e', [1 4]); %data(i, 1) is X, data(i, 2) is Y, data(i, 3) is L and data(i, 4) is Theta 
     i = i + 1; % Increment by 1 to keep track of lines
   end
 
@@ -68,7 +68,7 @@ function [] = getOptimalNumPanels(numPanels)
         %end
     end
     %phi = phi - sin(alpha)*vInf;
-    %for i = 1:sizeQ(1)
+    %.15eor i = 1:sizeQ(1)
      %   phiTot(i) = cos(alpha)*vInf*x(i, 1) + sum(phi) + (sin(alpha)*vInf)*x(i, 2);
     %end
     %v = Mt.*q + helpVect;
@@ -79,7 +79,7 @@ function [] = getOptimalNumPanels(numPanels)
     angle = ;
     fileID = fopen('cps.txt','w');
     for i = 1:sizeQ(1)
-        fprintf(fileID,'%f %f\n', cp(i), 2*(cos(2*angle)) - 1);
+        fprintf(fileID,'%.15e %.15e\n', cp(i), 2*(cos(2*angle)) - 1);
         angle = angle + (2*pi)/numPanels;
     end
     fclose(fileID);

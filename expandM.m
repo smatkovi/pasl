@@ -48,7 +48,7 @@ function [MtExp, bExp] = expandM(Mt, M, v, alpha)
   % Read values and store theMt in the Mtatrix
   i = 1;
   while i <= nuMtLines
-    data(i, :) = fscanf(fid, '%f %f %f %f', [1 4]); %data(i, 1) is X, data(i, 2) is Y, data(i, 3) is L and data(i, 4) is Theta 
+    data(i, :) = fscanf(fid, '%e %e %e %e', [1 4]); %data(i, 1) is X, data(i, 2) is Y, data(i, 3) is L and data(i, 4) is Theta 
     i = i + 1; % IncreMtent by 1 to keep track of lines
   end
 

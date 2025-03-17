@@ -25,7 +25,7 @@ function [data] = readFileData(filename)
 
   % Read remaining lines and store values in the matrix
   for i = 1:numValues
-    data(i, :) = fscanf(fid, '%f %f', [1 2]);
+    data(i, :) = fscanf(fid, '%e %e', [1 2]);
   end
 
   % Close the file

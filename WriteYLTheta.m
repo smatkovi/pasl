@@ -13,7 +13,7 @@ function [] = WriteYLTheta(filename)
 
         L = sqrt((x(sizeX(1)-i-1, 1) - x(sizeX(1)-i, 1))^2 + (x(sizeX(1)-i-1, 2) - x(sizeX(1)-i, 2))^2);
 
-        fprintf(fileID,'%f %f %f %f\n',X,Y,L,Theta);
+        fprintf(fileID,'%.15e %.15e %.15e %.15e\n',X,Y,L,Theta);
     end
 
     U = U + sqrt( (x(sizeX(1), 1) - x(sizeX(1)-1, 1))^2 + (x(sizeX(1), 2) - x(sizeX(1)-1, 2))^2);

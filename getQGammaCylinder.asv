@@ -37,7 +37,7 @@ function [] = getQGammaCylinder(panels)
   % Read values and store them in the matrix
   i = 1;
   while i <= numLines
-    data(i, :) = fscanf(fid, '%f %f %f %f', [1 4]); %data(i, 1) is X, data(i, 2) is Y, data(i, 3) is L and data(i, 4) is Theta 
+    data(i, :) = fscanf(fid, '%e %e %e %e', [1 4]); %data(i, 1) is X, data(i, 2) is Y, data(i, 3) is L and data(i, 4) is Theta 
     i = i + 1; % Increment by 1 to keep track of lines
   end
 
@@ -70,7 +70,7 @@ function [] = getQGammaCylinder(panels)
     cp = zeros(sizeMExp(1), 1);
     for i = 1:sizeQ(1)
         cp(i) = 1 - (v(i)/vInf)^2;
-        fprintf(fileID,'%f\n', cp(i));
+        fprintf(fileID,'%.15e\n', cp(i));
     end
     c_a = sum(ca);
     disp(c_a)
