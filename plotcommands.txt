@@ -4,3 +4,5 @@ set style line 1 lc rgb 'purple''
 set title "Data from cps.txt"
  set xlabel "Panel"
  plot "cps.txt" using 0:1 ls 1 title 'c_p'
+--
+plot "cps.txt" using ($0 / lines("cps.txt")):1 ls 1 title 'Column 1', "" using ($0 / lines("cps.txt")):2 ls 2 title 'Column 2'
