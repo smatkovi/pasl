@@ -63,9 +63,9 @@ function [] = getQGammaCylinder(panels)
     end
     
     %v = Mt.*q + helpVect;
-    disp(v)
-    disp("ca:")
-    disp(ca)
+    %disp(v)
+    %disp("ca:")
+    %disp(ca)
     fileID = fopen('cpscas.txt','w');
     cp = zeros(sizeMExp(1), 1);
     for i = 1:sizeQ(1)
@@ -73,6 +73,6 @@ function [] = getQGammaCylinder(panels)
         fprintf(fileID,'%.15e\n', cp(i));
     end
     c_a = sum(ca);
-    disp(c_a)
+    %disp(c_a)
     fclose(fileID);
 end

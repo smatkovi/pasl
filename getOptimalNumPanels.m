@@ -72,10 +72,10 @@ function [M] = getOptimalNumPanels(numPanels)
      %   phiTot(i) = cos(alpha)*vInf*x(i, 1) + sum(phi) + (sin(alpha)*vInf)*x(i, 2);
     %end
     %v = Mt.*q + helpVect;
-    %%disp(v);
-    %disp(cp(1));
-    %disp(sum(cp));
-    %disp(2*cos(2*(phiTot)- 1));
+    %%%disp(v);
+    %%disp(cp(1));
+    %%disp(sum(cp));
+    %%disp(2*cos(2*(phiTot)- 1));
     angle = 0;
     fileID = fopen('cps.txt','w');
     for i = 1:sizeQ(1)
@@ -83,11 +83,11 @@ function [M] = getOptimalNumPanels(numPanels)
         angle = angle + (2*pi)/numPanels;
     end
     fclose(fileID);
-    %disp("q");
-    %disp(q);
-    %disp("v");
-    %disp(v);
-    %disp("cp");
-    %disp(cp)
-    %disp(M);
+    %%disp("q");
+    %%disp(q);
+    %%disp("v");
+    %%disp(v);
+    %%disp("cp");
+    %%disp(cp)
+    %%disp(M);
 end

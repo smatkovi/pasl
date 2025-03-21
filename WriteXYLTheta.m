@@ -7,7 +7,7 @@ function [t] = WriteXYLTheta(filename)
         disp("alert: first panel suggests clockwise order of points,\n should be counterclockwise (mathematically positive)");
     end
     fileID = fopen('XYLTheta.txt','w');
-    disp(sizeX);
+    %disp(sizeX);
 
     for i = 0:sizeX(1)-1
         %i = sizeX(1)-k-1;

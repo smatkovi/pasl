@@ -60,9 +60,9 @@ function [] = getQGammaProfile(filenameProfile)
     end
     
     %v = Mt.*q + helpVect;
-    disp(v)
-    disp("ca:")
-    disp(ca)
+    %disp(v)
+    %disp("ca:")
+    %disp(ca)
     fileID = fopen('cps1.txt','w');
     cp = zeros(sizeMExp(1), 1);
     x = readFileData(filenameProfile);
@@ -84,7 +84,7 @@ function [] = getQGammaProfile(filenameProfile)
         fprintf(fileID,'%.15e\n', cp(i));
     end
     c_a = sum(ca);
-    disp(c_a)
+    %disp(c_a)
     fclose(fileID);
     fileID = fopen('cps2.txt','w');
     j=0;

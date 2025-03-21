@@ -10,7 +10,8 @@ function [] = WriteCylinder(numPanels)
     rot(2, 1) = sin(theta);
     rot(2, 2) = cos(theta);
 
-    for i = 1:numPanels-1
+    fprintf(fileID,'%.15e %.15e\n', x);
+    for i = 1:numPanels-2
         x = rot*x + [0.5; 0];
         fprintf(fileID,'%.15e %.15e\n', x);
     end
