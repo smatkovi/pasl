@@ -6,3 +6,5 @@ set title "Data from cps.txt"
  plot "cps.txt" using 0:1 ls 1 title 'c_p'
 --
 plot "cps.txt" using ($0 / lines("cps.txt")):1 ls 1 title 'Column 1', "" using ($0 / lines("cps.txt")):2 ls 2 title 'Column 2'
+plot "cps1.txt" using ($0/(system("wc -l < cps1.txt"))):1 ls 1 title 'c_p B737 upper wing', \
+"cps2.txt" using ($0/(system("wc -l < cps2.txt"))):1 ls 2 title 'c_p B737 lower wing'
