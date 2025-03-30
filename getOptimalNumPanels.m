@@ -84,6 +84,7 @@ function [M] = getOptimalNumPanels(numPanels)
         fprintf(fileID,'%.15e %.15e\n', cp(i), exact);
 	err = err + abs(cp(i) - exact);
         angle = angle + (2*pi)/numPanels;
+
     end
     err = err / sizeQ(1);
     fclose(fileID);
@@ -94,5 +95,5 @@ function [M] = getOptimalNumPanels(numPanels)
     %%disp("cp");
     %%disp(cp)
     %%disp(M);
-    disp(-log(numPanels)/log(err));
+    disp(err);
 end

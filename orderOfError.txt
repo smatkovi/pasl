@@ -1,0 +1,10 @@
+octave:1> getOptimalNumPanels(8);
+1.0000
+octave:2> getOptimalNumPanels(32);
+0.2500
+octave:3> log(1/0.25)/log(32/8)
+ans = 1
+octave:4> getOptimalNumPanels(128);
+0.062500
+octave:5> log(0.25/0.0625)/log(128/32)
+ans = 1
