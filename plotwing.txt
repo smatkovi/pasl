@@ -1,0 +1,1 @@
+gnuplot -e "ARG1='wingprofile.dat'" plot_wingprofile.gp
