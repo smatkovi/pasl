@@ -1,5 +1,5 @@
 # Set the input filename from the first argument passed to gnuplot
-filename = 'n0012.dat'
+filename = 'b707a.dat'
 
 # Set the title directly using the filename
 set title sprintf("Wing Profile: %s", filename)
