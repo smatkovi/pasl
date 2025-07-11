@@ -70,11 +70,11 @@ function [] = getQGammaProfile(filenameProfile)
     sizeX=size(x);
 
     if(x(3,2) > 0)
-      while(x(separator, 2) > 0)
+      while(x(separator, 2) >= 0)
          separator = separator + 1;
       end
     else
-         while(x(separator, 2) < 0)
+         while(x(separator, 2) <= 0)
          separator = separator + 1;
          end
     end
