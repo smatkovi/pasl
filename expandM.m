@@ -3,22 +3,14 @@ function [MtExp, bExp] = expandM(Mt, M, v, alpha)
     sizeM = size(M);
 
     MtExp = zeros(sizeMt(1)+1, sizeMt(1)+1);
+	MtExp(1:sizeMt(1), 1:sizeMt(1)) = M;
     for i = 1:sizeMt(1)
-        for j = 1:sizeMt(1)
-            MtExp(i, j) = Mt(i, j);
-        end
-    end
-
-    for i = 1:sizeMt(1)
-        for j = 1:sizeMt(1)
-            MtExp(i, sizeMt(1)+1) = MtExp(i, sizeMt(1)) + Mt (i, j);
-        end
+        MtExp(i, sizeMt(1)+1) = sum(Mt(i, :));
     end
     for j = 1:sizeMt(1)
-        MtExp(sizeMt(1)+1, j) = Mt(1, j) + Mt(sizeMt(1), j);
-        MtExp(sizeMt(1)+1, sizeMt(1)+1) = MtExp(sizeMt(1)+1, sizeMt(1)+1) - M(1, j) + M(sizeM(1), j);
+        MtExp(sizeMt(1)+1, j) = MtExp(1, j) + Mt (sizeMt(1), j);
     end
-   
+    MtExp(end, end) = -sum(M(1,:)) - sum(M(end,:));
     bExp = zeros(sizeMt(1)+1, 1);
 
   % Open the file with XYLTheta for reading
