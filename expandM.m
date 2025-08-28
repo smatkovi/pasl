@@ -8,7 +8,7 @@ function [MtExp, bExp] = expandM(Mt, M, v, alpha)
         MtExp(i, sizeMt(1)+1) = sum(Mt(i, :));
     end
     for j = 1:sizeMt(1)
-        MtExp(sizeMt(1)+1, j) = MtExp(1, j) + Mt (sizeMt(1), j);
+        MtExp(sizeMt(1)+1, j) = Mt(1, j) + Mt (sizeMt(1), j);
     end
     MtExp(end, end) = -sum(M(1,:)) - sum(M(end,:));
     bExp = zeros(sizeMt(1)+1, 1);
