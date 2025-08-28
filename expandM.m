@@ -47,7 +47,7 @@ function [MtExp, bExp] = expandM(Mt, M, v, alpha)
   % Close the file
     fclose(fid);
     for i = 1:sizeMt(1)
-        bExp(i) = v*sin(alpha - data(i, 4));
+        bExp(i) = -v*sin(alpha - data(i, 4));
     end
     bExp(sizeMt(1)+1) = -v*(cos(alpha - data(1, 4)) + cos(alpha - data(sizeMt(1), 4)));
 end
