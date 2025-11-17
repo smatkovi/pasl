@@ -47,12 +47,26 @@ function [M] = computeMTFromXYLTheta(filename)
               I(i, j) = 0;
               J(i, j) = 0.5;
           else
-              I(i, j) = log(((data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2)/((data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2))/(4*pi);
-              J(i, j) = atan2((data(j, 3) - 2*xi(i, j)), (2*eta(i, j)))/(2*pi) + atan2((data(j, 3) + 2*xi(i, j)), (2*eta(i, j)))/(2*pi);
+              % Korrigierte Berechnung
+              term1 = (data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2;
+              term2 = (data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2;
+              I(i, j) = log(term1/term2)/(4*pi);
+              
+              % Korrigiertes J mit atan statt atan2
+              if abs(eta(i, j)) < 1e-12
+                  J(i, j) = 0;
+              else
+                  arg1 = (data(j, 3) - 2*xi(i, j)) / (2*abs(eta(i, j)));
+                  arg2 = (data(j, 3) + 2*xi(i, j)) / (2*abs(eta(i, j)));
+                  J(i, j) = (atan(arg1) + atan(arg2))/(2*pi);
+                  if eta(i, j) < 0
+                      J(i, j) = -J(i, j);
+                  end
+              end
           end
 
-          M(i, j) = cos(data(i, 4) - data(j, 4))*I(i, j)+sin(data(i, 4) - data(j, 4))*J(i, j);
+          % Tangentialkomponente
+          M(i, j) = cos(data(i, 4) - data(j, 4))*I(i, j) + sin(data(i, 4) - data(j, 4))*J(i, j);
       end
   end
-end  
-
+end
