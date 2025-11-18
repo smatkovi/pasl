@@ -1,78 +1,111 @@
 function [] = getQGammaCylinder(panels)
     numPanels = panels;
-    t=1; %Profiltiefe
+    t = 1; % Profiltiefe
+    
+    % Erzeuge Zylinder und berechne Panel-Parameter
     WriteCylinder(numPanels);
     WriteXYLTheta("cylinder.txt");
-    M = computeMCurlFromXYLTheta("XYLTheta.txt", "cylinder.txt");
-    Mt = computeMTCurlFromXYLTheta("XYLTheta.txt");
+    
+    % Berechne Matrizen für Wirbelbelegung
+    % M ist für Normalgeschwindigkeiten
+    M = computeMFromXYLTheta("XYLTheta.txt");
+    
+    % Mt ist für Tangentialgeschwindigkeiten  
+    Mt = computeMTFromXYLTheta("XYLTheta.txt");
+    
     vInf = 1;
     alpha = 0;
+    
+    % Erweitere System für Wirbelbelegung
     [MExp, bExp] = expandM(Mt, M, vInf, alpha);
-    sizeMExp=size(MExp);
+    sizeMExp = size(MExp);
+    
+    % Löse erweitertes System (q1...qn, Gamma)
     q = computeQFromMExp(MExp, bExp);
-
-      filename = "XYLTheta.txt";
-  fid = fopen(filename, 'r');
-
-  % Check if file opened successfully
-  if fid == -1
-    error(['Error: Could not open file ' filename]);
-  end
-
-  % Count the number of lines in the file
-  numLines = 0;
-  tline = fgetl(fid);
-  while ischar(tline)
-    numLines = numLines + 1;
-    tline = fgetl(fid);
-  end
-
-  % Close the file and reopen to reset the file pointer
-  fclose(fid);
-  fid = fopen(filename, 'r');
-
-  % Pre-allocate memory for the matrix with 4 rows
-  data = zeros(numLines, 4);
-
-  % Read values and store them in the matrix
-  i = 1;
-  while i <= numLines
-    data(i, :) = fscanf(fid, '%e %e %e %e', [1 4]); %data(i, 1) is X, data(i, 2) is Y, data(i, 3) is L and data(i, 4) is Theta 
-    i = i + 1; % Increment by 1 to keep track of lines
-  end
-
-  % Close the file
-    fclose(fid);
-
-    Mt = computeMTCurlFromXYLTheta("XYLTheta.txt");
-    sizeMt = size(Mt);
-    %helpVect = zeros(sizeMt(1), 1);
-    sizeQ = size(q);
-    v = zeros(sizeMExp(1), 1);
-    vY = zeros(sizeMExp(1), 1);
-    ca = zeros(sizeMExp(1), 1);
-    for i = 1:sizeMt(1)
-        for j = 1:sizeQ(1)-1
-            %helpVect(i) = vInf*cos(alpha - data(i, 4));
-            v(i) = v(i) + Mt(i, j)*q(j) - q(sizeQ(1))*M(i, j);
-            vY(i) = vY(i) + Mt(i, j)*q(j) + q(sizeQ(1))*M(i, j);
-        end
-        v(i) = v(i) + vInf*cos(alpha - data(i, 4));
-        vY(i) = vY(i) + vInf*sin(alpha);
-        ca(i) = ((v(i)/vInf)^2)/t * cos(alpha - data(i, 4))*data(i, 3);
+    
+    % Lade Panel-Daten
+    filename = "XYLTheta.txt";
+    fid = fopen(filename, 'r');
+    if fid == -1
+        error(['Error: Could not open file ' filename]);
     end
     
-    %v = Mt.*q + helpVect;
-    %disp(v)
-    %disp("ca:")
-    %disp(ca)
-    fileID = fopen('cpscas.txt','w');
-    cp = zeros(sizeMExp(1), 1);
-    for i = 1:sizeQ(1)
+    numLines = 0;
+    tline = fgetl(fid);
+    while ischar(tline)
+        numLines = numLines + 1;
+        tline = fgetl(fid);
+    end
+    
+    fclose(fid);
+    fid = fopen(filename, 'r');
+    
+    data = zeros(numLines, 4);
+    i = 1;
+    while i <= numLines
+        data(i, :) = fscanf(fid, '%e %e %e %e', [1 4]);
+        i = i + 1;
+    end
+    fclose(fid);
+    
+    sizeMt = size(Mt);
+    sizeQ = size(q);
+    
+    % Berechne Geschwindigkeiten
+    v = zeros(sizeMt(1), 1);
+    
+    for i = 1:sizeMt(1)
+        % Tangentialgeschwindigkeit von Quellen und Wirbel
+        for j = 1:sizeMt(1)
+            % Beitrag der Quelle j zur Tangentialgeschwindigkeit bei i
+            v(i) = v(i) + Mt(i,j) * q(j);
+        end
+        
+        % Beitrag der konstanten Wirbelbelegung Gamma (letztes Element von q)
+        % Die Wirbelbelegung trägt zur Tangentialgeschwindigkeit bei
+        % WICHTIG: Verwende Mt, nicht M!
+        if sizeQ(1) > sizeMt(1)
+            % Für konstante Wirbelbelegung auf allen Panels
+            for j = 1:sizeMt(1)
+                % Der Einfluss eines Wirbels ist wie eine Quelle um 90° gedreht
+                % Also verwenden wir die Normalgeschwindigkeitsmatrix M
+                % mit negativem Vorzeichen für die Tangentialgeschwindigkeit
+                v(i) = v(i) - M(i,j) * q(sizeQ(1));
+            end
+        end
+        
+        % Anströmgeschwindigkeit
+        v(i) = v(i) + vInf * cos(alpha - data(i, 4));
+    end
+    
+    % Berechne Druckbeiwerte
+    cp = zeros(sizeMt(1), 1);
+    for i = 1:sizeMt(1)
         cp(i) = 1 - (v(i)/vInf)^2;
+    end
+    
+    % Ausgabe
+    fprintf('Zylinder mit %d Panels und Wirbelbelegung:\n', numPanels);
+    fprintf('Gamma = %.6f\n', q(end));
+    fprintf('cp Bereich: [%.2f, %.2f]\n', min(cp), max(cp));
+    
+    % Für Zylinder sollte Gamma ≈ 0 sein (kein Auftrieb)
+    if abs(q(end)) < 1e-6
+        fprintf('OK: Gamma ≈ 0 (kein Auftrieb beim Zylinder)\n');
+    else
+        fprintf('WARNUNG: Gamma = %.6f (sollte ≈ 0 sein)\n', q(end));
+    end
+    
+    % Speichere Ergebnisse
+    fileID = fopen('cpscas.txt','w');
+    for i = 1:sizeMt(1)
         fprintf(fileID,'%.15e\n', cp(i));
     end
-    c_a = sum(ca);
-    %disp(c_a)
     fclose(fileID);
+    
+    % Prüfe auf unrealistische Werte
+    if max(abs(cp)) > 10
+        fprintf('WARNUNG: Unrealistische cp-Werte detektiert!\n');
+        fprintf('Überprüfe die Matrizen-Berechnung.\n');
+    end
 end

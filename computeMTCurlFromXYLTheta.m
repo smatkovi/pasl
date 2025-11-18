@@ -47,13 +47,30 @@ function [M] = computeMTCurlFromXYLTheta(filename)
               I(i, j) = 0;
               J(i, j) = 0.5;
           else
-              I(i, j) = log(((data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2)/((data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2))/(4*pi);
-              J(i, j) = atan2((data(j, 3) - 2*xi(i, j))/, 2*eta(i, j)))/(2*pi) + atan2((data(j, 3) + 2*xi(i, j)), (2*eta(i, j)))/(2*pi);
+              term1 = (data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2;
+              term2 = (data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2;
+              I(i, j) = log(term1/term2)/(4*pi);
+              
+              % KORRIGIERT: Entferne den falschen "/" und korrigiere atan2 Syntax
+              % Behandle Singularität wenn eta nahe 0
+              if abs(eta(i, j)) < 1e-12
+                  J(i, j) = 0;
+              else
+                  % Option 1: Mit atan (empfohlen für Hess-Smith)
+                  arg1 = (data(j, 3) - 2*xi(i, j)) / (2*abs(eta(i, j)));
+                  arg2 = (data(j, 3) + 2*xi(i, j)) / (2*abs(eta(i, j)));
+                  J(i, j) = (atan(arg1) + atan(arg2))/(2*pi);
+                  if eta(i, j) < 0
+                      J(i, j) = -J(i, j);
+                  end
+                  
+                  % Option 2: Mit atan2 (alternative)
+                  % J(i, j) = (atan2(2*eta(i, j), data(j, 3) - 2*xi(i, j)) + ...
+                  %            atan2(2*eta(i, j), data(j, 3) + 2*xi(i, j)))/(2*pi);
+              end
           end
 
-	  	  M(i,j) = cos(data(i,4) - data(j,4)) * I(i,j) + sin(data(i,4) - data(j,4)) * J(i,j);
-
+          M(i,j) = cos(data(i,4) - data(j,4)) * I(i,j) + sin(data(i,4) - data(j,4)) * J(i,j);
       end
   end
-end  
-
+end
