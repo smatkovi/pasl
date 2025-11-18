@@ -47,29 +47,27 @@ function [M] = computeMTCurlFromXYLTheta(filename)
               I(i, j) = 0;
               J(i, j) = 0.5;
           else
-              term1 = (data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2;
-              term2 = (data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2;
-              I(i, j) = log(term1/term2)/(4*pi);
+              % I bleibt gleich
+              I(i, j) = log(((data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2)/((data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2))/(4*pi);
               
-              % KORRIGIERT: Entferne den falschen "/" und korrigiere atan2 Syntax
-              % Behandle Singularität wenn eta nahe 0
+              % WICHTIG: Singularitätsbehandlung für J
               if abs(eta(i, j)) < 1e-12
+                  % Wenn eta ≈ 0, dann J = 0
                   J(i, j) = 0;
               else
-                  % Option 1: Mit atan (empfohlen für Hess-Smith)
+                  % Normale Berechnung mit atan
                   arg1 = (data(j, 3) - 2*xi(i, j)) / (2*abs(eta(i, j)));
                   arg2 = (data(j, 3) + 2*xi(i, j)) / (2*abs(eta(i, j)));
                   J(i, j) = (atan(arg1) + atan(arg2))/(2*pi);
+                  
+                  % Vorzeichen-Korrektur wenn eta < 0
                   if eta(i, j) < 0
                       J(i, j) = -J(i, j);
                   end
-                  
-                  % Option 2: Mit atan2 (alternative)
-                  % J(i, j) = (atan2(2*eta(i, j), data(j, 3) - 2*xi(i, j)) + ...
-                  %            atan2(2*eta(i, j), data(j, 3) + 2*xi(i, j)))/(2*pi);
               end
           end
 
+          % Für Tangentialgeschwindigkeit mit Wirbel
           M(i,j) = cos(data(i,4) - data(j,4)) * I(i,j) + sin(data(i,4) - data(j,4)) * J(i,j);
       end
   end

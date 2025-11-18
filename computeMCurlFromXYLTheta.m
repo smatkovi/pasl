@@ -48,13 +48,28 @@ function [M] = computeMCurlFromXYLTheta(filename, filename2)
               I(i, j) = 0;
               J(i, j) = 0.5;
           else
+              % I bleibt gleich
               I(i, j) = log(((data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2)/((data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2))/(4*pi);
-              J(i, j) = atan2((data(j, 3) - 2*xi(i, j)), (2*eta(i, j)))/(2*pi) + atan2((data(j, 3) + 2*xi(i, j)), (2*eta(i, j)))/(2*pi);
+              
+              % WICHTIG: Singularitätsbehandlung für J
+              if abs(eta(i, j)) < 1e-12
+                  % Wenn eta ≈ 0, dann J = 0
+                  J(i, j) = 0;
+              else
+                  % Normale Berechnung mit atan
+                  arg1 = (data(j, 3) - 2*xi(i, j)) / (2*abs(eta(i, j)));
+                  arg2 = (data(j, 3) + 2*xi(i, j)) / (2*abs(eta(i, j)));
+                  J(i, j) = (atan(arg1) + atan(arg2))/(2*pi);
+                  
+                  % Vorzeichen-Korrektur wenn eta < 0
+                  if eta(i, j) < 0
+                      J(i, j) = -J(i, j);
+                  end
+              end
           end
 
-	  M(i,j) = cos(data(i,4) - data(j,4)) * I(i,j) + sin(data(i,4) - data(j,4)) * J(i,j);
-
+          % Für Curl (Wirbel): gleiche Kombination wie bei M
+          M(i,j) = -sin(data(i,4) - data(j,4)) * I(i,j) + cos(data(i,4) - data(j,4)) * J(i,j);
       end
   end
-end  
-
+end
