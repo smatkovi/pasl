@@ -1,74 +1,97 @@
 function [M] = computeMTFromXYLTheta(filename)
-  % Open the file with XYLTheta for reading
-  fid = fopen(filename, 'r');
-
-  % Check if file opened successfully
-  if fid == -1
-    error(['Error: Could not open file ' filename]);
-  end
-
-  % Count the number of lines in the file
-  numLines = 0;
-  tline = fgetl(fid);
-  while ischar(tline)
-    numLines = numLines + 1;
+    % Berechnet die Tangentialgeschwindigkeits-Matrix MT
+    % Input: filename - Datei mit X, Y, L, Theta Werten
+    % Output: M - Matrix fuer Tangentialgeschwindigkeiten
+    
+    % Datei einlesen
+    fid = fopen(filename, 'r');
+    if fid == -1
+        error(['Error: Could not open file ' filename]);
+    end
+    
+    % Anzahl der Zeilen zaehlen
+    numLines = 0;
     tline = fgetl(fid);
-  end
-
-  % Close the file and reopen to reset the file pointer
-  fclose(fid);
-  fid = fopen(filename, 'r');
-
-  % Pre-allocate memory for the matrix with 4 rows
-  data = zeros(numLines, 4);
-
-  % Read values and store them in the matrix
-  i = 1;
-  while i <= numLines
-    data(i, :) = fscanf(fid, '%e %e %e %e', [1 4]); %data(i, 1) is X, data(i, 2) is Y, data(i, 3) is L and data(i, 4) is Theta 
-    i = i + 1; % Increment by 1 to keep track of lines
-  end
-
-  % Close the file
-  fclose(fid);
-
-  xi = zeros(numLines, numLines);
-  eta = zeros(numLines, numLines);
-  I = zeros(numLines, numLines);
-  J = zeros(numLines, numLines);
-  M = zeros(numLines, numLines);
-
-  for i = 1:numLines
-      for j = 1:numLines
-          xi(i, j) = (data(i, 1) - data(j, 1))*cos(data(j, 4)) + (data(i, 2) - data(j, 2))*sin(data(j, 4));
-          eta(i, j) = -(data(i, 1) - data(j, 1))*sin(data(j, 4)) + (data(i, 2) - data(j, 2))*cos(data(j, 4));
-
-          if i == j
-              I(i, j) = 0;
-              J(i, j) = 0.5;
-          else
-              % I bleibt gleich
-              I(i, j) = log(((data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2)/((data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2))/(4*pi);
-              
-              % WICHTIG: Singularitaetsbehandlung fuer J
-              if abs(eta(i, j)) < 1e-12
-                  % Wenn eta ~ 0, dann J = 0
-                  J(i, j) = 0;
-              else
-                  % Normale Berechnung mit atan
-                  arg1 = (data(j, 3) - 2*xi(i, j)) / (2*abs(eta(i, j)));
-                  arg2 = (data(j, 3) + 2*xi(i, j)) / (2*abs(eta(i, j)));
-                  J(i, j) = (atan(arg1) + atan(arg2))/(2*pi);
-                  
-                  % Vorzeichen-Korrektur wenn eta < 0
-                  if eta(i, j) < 0
-                      J(i, j) = -J(i, j);
-                  end
-              end
-          end
-
-          % Fuer Tangentialgeschwindigkeit: andere Kombination
-          M(i, j) = cos(data(i, 4) - data(j, 4))*I(i, j) + sin(data(i, 4) - data(j, 4))*J(i, j);
-      end
-  end
+    while ischar(tline)
+        numLines = numLines + 1;
+        tline = fgetl(fid);
+    end
+    
+    % Datei neu oeffnen
+    fclose(fid);
+    fid = fopen(filename, 'r');
+    
+    % Daten einlesen: X, Y, L, Theta
+    data = zeros(numLines, 4);
+    for i = 1:numLines
+        data(i, :) = fscanf(fid, '%e %e %e %e', [1 4]);
+    end
+    fclose(fid);
+    
+    % Matrizen initialisieren
+    xi = zeros(numLines, numLines);
+    eta = zeros(numLines, numLines);
+    I = zeros(numLines, numLines);
+    J = zeros(numLines, numLines);
+    M = zeros(numLines, numLines);
+    
+    % Berechnung der Matrixelemente
+    for i = 1:numLines
+        for j = 1:numLines
+            % Lokale Koordinaten
+            xi(i,j) = (data(i,1) - data(j,1)) * cos(data(j,4)) + ...
+                      (data(i,2) - data(j,2)) * sin(data(j,4));
+            eta(i,j) = -(data(i,1) - data(j,1)) * sin(data(j,4)) + ...
+                        (data(i,2) - data(j,2)) * cos(data(j,4));
+            
+            if i == j
+                % Diagonalelemente
+                I(i,j) = 0;
+                J(i,j) = 0.5;
+            else
+                % I-Integral (logarithmisch)
+                numerator = (data(j,3) + 2*xi(i,j))^2 + 4*eta(i,j)^2;
+                denominator = (data(j,3) - 2*xi(i,j))^2 + 4*eta(i,j)^2;
+                
+                % Singularitaetsbehandlung
+                if abs(numerator) < 1e-12 || abs(denominator) < 1e-12
+                    I(i,j) = 0;
+                else
+                    I(i,j) = log(numerator/denominator) / (4*pi);
+                end
+                
+                % J-Integral mit atan2 fuer korrekte Quadranten
+                if abs(eta(i,j)) < 1e-12
+                    % Sonderfall: eta ~ 0
+                    if abs(xi(i,j)) < data(j,3)/2
+                        J(i,j) = 0.5;
+                    else
+                        J(i,j) = 0;
+                    end
+                else
+                    % Normale Berechnung mit atan2
+                    angle1 = atan2(2*eta(i,j), data(j,3) - 2*xi(i,j));
+                    angle2 = atan2(2*eta(i,j), data(j,3) + 2*xi(i,j));
+                    
+                    % Winkeldifferenz berechnen
+                    dangle = angle2 - angle1;
+                    
+                    % Auf [-pi, pi] normalisieren
+                    while dangle > pi
+                        dangle = dangle - 2*pi;
+                    end
+                    while dangle < -pi
+                        dangle = dangle + 2*pi;
+                    end
+                    
+                    J(i,j) = dangle / (2*pi);
+                end
+            end
+            
+            % Matrix fuer Tangentialgeschwindigkeit
+            % WICHTIG: Andere Vorzeichen als bei Normalgeschwindigkeit!
+            M(i,j) = cos(data(i,4) - data(j,4)) * I(i,j) + ...
+                     sin(data(i,4) - data(j,4)) * J(i,j);
+        end
+    end
 end
