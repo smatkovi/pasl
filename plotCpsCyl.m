@@ -6,13 +6,13 @@ function plotCpsCyl(numPanels)
     % plot "cps.txt" using ($0/(AnzahlZeilen)):1 ls 1 title 'c_p', \
     %      '' using ($0/(AnzahlZeilen)):2 ls 2 title 'c_p aus Potenzialtheorie'
     %
-    % numPanels: Anzahl der Panels, wird genutzt für Ausgabe-Dateiname
-    %            und für Anzeige im Titel.
+    % numPanels: Anzahl der Panels, wird genutzt fuer Ausgabe-Dateiname
+    %            und fuer Anzeige im Titel.
     %
     % Beispiel: plotCpsCyl(360)
     
     if nargin < 1 || ~isscalar(numPanels) || numPanels <= 0
-        error('Bitte eine positive Zahl für numPanels angeben.');
+        error('Bitte eine positive Zahl fuer numPanels angeben.');
     end
     
     % Daten einlesen
@@ -41,7 +41,7 @@ function plotCpsCyl(numPanels)
 	legend('Location','northoutside','Orientation','horizontal');
     grid on;
     
-    % Papiergröße für PNG mit 1024x768 Pixel bei 150 dpi setzen
+    % Papiergroeße fuer PNG mit 1024x768 Pixel bei 150 dpi setzen
     dpi = 150;
     width_pix = 1024;
     height_pix = 768;

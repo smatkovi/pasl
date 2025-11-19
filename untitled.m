@@ -4,7 +4,7 @@ clc; clear; close all;
 
 % Hauptprogramm
 R = 0.5;                  % Radius des Zylinders [m]
-V_inf = 1;               % Anströmgeschwindigkeit [m/s]
+V_inf = 1;               % Anstroemgeschwindigkeit [m/s]
 alpha = 0;               % Anstellwinkel [Grad]
 n = 8;                   % Anzahl der Panels
 
@@ -38,10 +38,10 @@ function [x, y, x_mid, y_mid, theta_panel, lengths] = define_geometry(R, n)
     x_mid = R * cos(theta);
     y_mid = R * sin(theta);
 
-    % Panel-Neigungswinkel und Länge
+    % Panel-Neigungswinkel und Laenge
     dx = -R * sin(theta + dtheta / 2) + R * sin(theta - dtheta / 2);
     dy =  R * cos(theta + dtheta / 2) - R * cos(theta - dtheta / 2);
-    lengths = sqrt(dx.^2 + dy.^2); % Panel-Längen
+    lengths = sqrt(dx.^2 + dy.^2); % Panel-Laengen
     theta_panel = atan2(dy, dx);   % Neigungswinkel der Panels
 end
 
@@ -83,7 +83,7 @@ function b = compute_rhs(theta_panel, V_inf, alpha, n)
 end
 
 function q = solve_linear_system(M, b)
-    % Löse das Gleichungssystem
+    % Loese das Gleichungssystem
     q = M \ b;
 end
 
@@ -115,7 +115,7 @@ function [v_t, c_p] = compute_velocity_and_cp(x_mid, y_mid, theta_panel, lengths
             end
         end
 
-        % Hinzufügen der Anströmgeschwindigkeit
+        % Hinzufuegen der Anstroemgeschwindigkeit
         v_t(i) = v_t(i) + V_inf * cos(theta_panel(i) - deg2rad(alpha));
 
         % Druckkoeffizient

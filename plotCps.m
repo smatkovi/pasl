@@ -31,7 +31,7 @@ function plotCps(name)
 	legend('Location','northoutside','Orientation','horizontal');
     grid on;
 
-    % Bildauflösung einstellen: 1024 x 768 Pixel bei 150 dpi
+    % Bildaufloesung einstellen: 1024 x 768 Pixel bei 150 dpi
     dpi = 150;
     width_pix = 1024;
     height_pix = 768;

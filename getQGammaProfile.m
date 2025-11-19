@@ -45,9 +45,9 @@ function [] = getQGammaProfile(filenameProfile)
     sizeMt = size(Mt);
     %helpVect = zeros(sizeMt(1), 1);
     sizeQ = size(q);
-    v = zeros(sizeMExp(1), 1);
-    vY = zeros(sizeMExp(1), 1);
-    ca = zeros(sizeMExp(1), 1);
+    v = zeros(sizeMt(1), 1);
+    vY = zeros(sizeMt(1), 1);
+    ca = zeros(sizeMt(1), 1);
     for i = 1:sizeMt(1)
         for j = 1:sizeQ(1)-1
             %helpVect(i) = vInf*cos(alpha - data(i, 4));
@@ -56,7 +56,7 @@ function [] = getQGammaProfile(filenameProfile)
         end
         v(i) = v(i) + vInf*cos(alpha - data(i, 4));
         vY(i) = vY(i) + vInf*sin(alpha);
-        ca(i) = ((v(i)/vInf)^2)/t * cos(alpha - data(i, 4))*data(i, 3);
+        #ca(i) = ((v(i)/vInf)^2) * cos(alpha - data(i, 4))*data(i, 3);
     end
     
     %v = Mt.*q + helpVect;
@@ -83,7 +83,8 @@ function [] = getQGammaProfile(filenameProfile)
         cp(i) = 1 - (v(i)/vInf)^2;
         fprintf(fileID,'%.15e\n', cp(i));
     end
-    c_a = sum(ca);
+    #c_a = sum(ca)/t;
+	c_a = (2/(vInf*t)) * sum(v .* data(:,3));
     disp(c_a)
     fclose(fileID);
     fileID = fopen('cps2.txt','w');

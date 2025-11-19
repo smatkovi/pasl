@@ -50,9 +50,9 @@ function [M] = computeMTCurlFromXYLTheta(filename)
               % I bleibt gleich
               I(i, j) = log(((data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2)/((data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2))/(4*pi);
               
-              % WICHTIG: Singularitätsbehandlung für J
+              % WICHTIG: Singularitaetsbehandlung fuer J
               if abs(eta(i, j)) < 1e-12
-                  % Wenn eta ≈ 0, dann J = 0
+                  % Wenn eta ~ 0, dann J = 0
                   J(i, j) = 0;
               else
                   % Normale Berechnung mit atan
@@ -67,7 +67,7 @@ function [M] = computeMTCurlFromXYLTheta(filename)
               end
           end
 
-          % Für Tangentialgeschwindigkeit mit Wirbel
+          % Fuer Tangentialgeschwindigkeit mit Wirbel
           M(i,j) = cos(data(i,4) - data(j,4)) * I(i,j) + sin(data(i,4) - data(j,4)) * J(i,j);
       end
   end

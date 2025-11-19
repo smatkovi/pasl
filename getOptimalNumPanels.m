@@ -1,5 +1,5 @@
 function [err, cp_numerical, cp_exact] = getOptimalNumPanels(numPanels)
-    % Hess-Smith Panelverfahren für Kreiszylinder
+    % Hess-Smith Panelverfahren fuer Kreiszylinder
     % Input: numPanels - Anzahl der Panels
     % Output: err - mittlerer Fehler
     %         cp_numerical - numerische Druckbeiwerte
@@ -14,11 +14,11 @@ function [err, cp_numerical, cp_exact] = getOptimalNumPanels(numPanels)
     % Berechne Systemmatrix
     M = computeMFromXYLTheta("XYLTheta.txt");
     
-    % Strömungsparameter
-    vInf = 1;     % Anströmgeschwindigkeit
+    % Stroemungsparameter
+    vInf = 1;     % Anstroemgeschwindigkeit
     alpha = 0;    % Anstellwinkel
     
-    % Löse für Quellstärken
+    % Loese fuer Quellstaerken
     [q, ql] = computeQFromM(M, vInf, alpha);
     
     % Lade Panel-Daten
@@ -66,8 +66,8 @@ function [err, cp_numerical, cp_exact] = getOptimalNumPanels(numPanels)
         % Numerischer Druckbeiwert
         cp_numerical(i) = 1 - (v(i)/vInf)^2;
         
-        % Exakter Druckbeiwert für Kreiszylinder
-        % cp = 1 - 4*sin^2(phi) für Zylinder
+        % Exakter Druckbeiwert fuer Kreiszylinder
+        % cp = 1 - 4*sin^2(phi) fuer Zylinder
         phi = atan2(data(i, 2), data(i, 1) - 0.5);  % Winkel vom Mittelpunkt
         cp_exact(i) = 1 - 4*sin(phi)^2;
     end
@@ -78,7 +78,7 @@ function [err, cp_numerical, cp_exact] = getOptimalNumPanels(numPanels)
     % Ausgabe
     fprintf('Anzahl Panels: %d\n', numPanels);
     fprintf('Mittlerer Fehler: %.6e\n', err);
-    fprintf('Summe q*l: %.6e (sollte ≈ 0 sein)\n', sum(ql));
+    fprintf('Summe q*l: %.6e (sollte ~ 0 sein)\n', sum(ql));
     
     % Speichere Ergebnisse
     fileID = fopen('cps.txt','w');
@@ -111,7 +111,7 @@ function [err, cp_numerical, cp_exact] = getOptimalNumPanels(numPanels)
         hold on;
         plot(phi_plot, cp_exact, '-', 'Color', [0.5, 0, 0.5], ...
              'LineWidth', 2, 'DisplayName', 'Exakt');
-        xlabel('\phi [°]');
+        xlabel('\phi [deg]');
         ylabel('c_p');
         title(sprintf('Druckbeiwert - %d Panels', numPanels));
         legend('Location', 'South');

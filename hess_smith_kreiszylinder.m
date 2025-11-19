@@ -1,9 +1,9 @@
 function hess_smith_kreiszylinder(N)
-% Hess-Smith Panelverfahren für einen Kreiszylinder mit Skalierung und Gewichtung
+% Hess-Smith Panelverfahren fuer einen Kreiszylinder mit Skalierung und Gewichtung
 
 % Parameter
 R = 1; % Radius des Kreiszylinders
-V_inf = 1; % Anströmgeschwindigkeit
+V_inf = 1; % Anstroemgeschwindigkeit
 alpha = 0; % Anstellwinkel
 N = 8; % Anzahl der Panels
 
@@ -32,10 +32,10 @@ for i = 1:N
     M(i,:) = M(i,:) / dl(i);
 end
 
-% Inhomogenitäten (mit Gewichtung)
+% Inhomogenitaeten (mit Gewichtung)
 b = -V_inf*sin(alpha-theta)' .* dl';
 
-% Lösung des Gleichungssystems
+% Loesung des Gleichungssystems
 q = M\b;
 
 % Tangentiale Geschwindigkeiten und Druckbeiwerte

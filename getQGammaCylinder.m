@@ -6,21 +6,21 @@ function [] = getQGammaCylinder(panels)
     WriteCylinder(numPanels);
     WriteXYLTheta("cylinder.txt");
     
-    % Berechne Matrizen für Wirbelbelegung
-    % M ist für Normalgeschwindigkeiten
+    % Berechne Matrizen fuer Wirbelbelegung
+    % M ist fuer Normalgeschwindigkeiten
     M = computeMFromXYLTheta("XYLTheta.txt");
     
-    % Mt ist für Tangentialgeschwindigkeiten  
+    % Mt ist fuer Tangentialgeschwindigkeiten  
     Mt = computeMTFromXYLTheta("XYLTheta.txt");
     
     vInf = 1;
     alpha = 0;
     
-    % Erweitere System für Wirbelbelegung
+    % Erweitere System fuer Wirbelbelegung
     [MExp, bExp] = expandM(Mt, M, vInf, alpha);
     sizeMExp = size(MExp);
     
-    % Löse erweitertes System (q1...qn, Gamma)
+    % Loese erweitertes System (q1...qn, Gamma)
     q = computeQFromMExp(MExp, bExp);
     
     % Lade Panel-Daten
@@ -62,19 +62,19 @@ function [] = getQGammaCylinder(panels)
         end
         
         % Beitrag der konstanten Wirbelbelegung Gamma (letztes Element von q)
-        % Die Wirbelbelegung trägt zur Tangentialgeschwindigkeit bei
+        % Die Wirbelbelegung traegt zur Tangentialgeschwindigkeit bei
         % WICHTIG: Verwende Mt, nicht M!
         if sizeQ(1) > sizeMt(1)
-            % Für konstante Wirbelbelegung auf allen Panels
+            % Fuer konstante Wirbelbelegung auf allen Panels
             for j = 1:sizeMt(1)
-                % Der Einfluss eines Wirbels ist wie eine Quelle um 90° gedreht
+                % Der Einfluss eines Wirbels ist wie eine Quelle um 90 Grad gedreht
                 % Also verwenden wir die Normalgeschwindigkeitsmatrix M
-                % mit negativem Vorzeichen für die Tangentialgeschwindigkeit
+                % mit negativem Vorzeichen fuer die Tangentialgeschwindigkeit
                 v(i) = v(i) - M(i,j) * q(sizeQ(1));
             end
         end
         
-        % Anströmgeschwindigkeit
+        % Anstroemgeschwindigkeit
         v(i) = v(i) + vInf * cos(alpha - data(i, 4));
     end
     
@@ -89,11 +89,11 @@ function [] = getQGammaCylinder(panels)
     fprintf('Gamma = %.6f\n', q(end));
     fprintf('cp Bereich: [%.2f, %.2f]\n', min(cp), max(cp));
     
-    % Für Zylinder sollte Gamma ≈ 0 sein (kein Auftrieb)
+    % Fuer Zylinder sollte Gamma ~ 0 sein (kein Auftrieb)
     if abs(q(end)) < 1e-6
-        fprintf('OK: Gamma ≈ 0 (kein Auftrieb beim Zylinder)\n');
+        fprintf('OK: Gamma ~ 0 (kein Auftrieb beim Zylinder)\n');
     else
-        fprintf('WARNUNG: Gamma = %.6f (sollte ≈ 0 sein)\n', q(end));
+        fprintf('WARNUNG: Gamma = %.6f (sollte ~ 0 sein)\n', q(end));
     end
     
     % Speichere Ergebnisse
@@ -103,9 +103,9 @@ function [] = getQGammaCylinder(panels)
     end
     fclose(fileID);
     
-    % Prüfe auf unrealistische Werte
+    % Pruefe auf unrealistische Werte
     if max(abs(cp)) > 10
         fprintf('WARNUNG: Unrealistische cp-Werte detektiert!\n');
-        fprintf('Überprüfe die Matrizen-Berechnung.\n');
+        fprintf('Ueberpruefe die Matrizen-Berechnung.\n');
     end
 end
