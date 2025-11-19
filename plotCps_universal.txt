@@ -1,4 +1,4 @@
-# plotCps_universal.txt - Universelle Version die Zeilenanzahl automatisch erkennt
+# plotCps_corrected.txt - Korrigiertes Gnuplot für Zylinder
 
 # Zuerst Anzahl der Zeilen bestimmen
 stats "cps.txt" nooutput
@@ -8,36 +8,42 @@ n_lines = STATS_records
 output_filename = sprintf("cps%d.png", n_lines)
 set output output_filename
 
-set terminal png size 1024,768
+# Terminal-Einstellungen - gleiche Größe wie MATLAB
+set terminal png size 1024,768 enhanced font "Arial,11"
 
-# Stil-Definitionen
-set style data linespoints
-set style line 1 lc rgb '#FF8800' lw 1.5 pt 2 ps 1.2  # Orange mit x-Markern (pt 2)
-set style line 2 lc rgb '#8000FF' lw 2 pt 0           # Violett ohne Marker
+# Linien-Stile
+set style line 1 lc rgb '#FF8000' lw 2 pt 2 ps 1.3   # Orange mit x-Markern
+set style line 2 lc rgb '#8000FF' lw 2.5              # Violett, nur Linie
 
 # Beschriftungen
-set title sprintf("Druckbeiwert - %d Panels", n_lines) font ",14"
-set xlabel "Panel (normalisiert)" font ",12"
-set ylabel "c_p" font ",12"
+set title sprintf("Druckbeiwert - %d Panels", n_lines) font "Arial Bold,14"
+set xlabel "Panel" font "Arial,12"
+set ylabel "c_p" font "Arial,12"
 
-# Gitter und Legende
+# Gitter
 set grid
-set key bottom center box
 
-# Achsenbereiche
+# Legende 
+set key inside right top box
+
+# Achsenbereiche - WICHTIG
 set xrange [0:1]
 set yrange [-3:1]
 
-# X-Ticks bei wichtigen Positionen
+# Achsen-Ticks
 set xtics 0,0.1,1
+set ytics -3,0.5,1
 
-# Plot mit normalisierter Panel-Position (0 bis 1)
-# column(0) ist Zeilennummer (0-basiert), geteilt durch Gesamtzahl ergibt 0 bis ~0.875 für 8 Zeilen
-# Daher verwenden wir column(0)/(n_lines-1) für exakt 0 bis 1, oder column(0)/n_lines für 0 bis (n-1)/n
-plot "cps.txt" using (column(0)/n_lines):1 with linespoints ls 1 title 'c_p numerisch', \
-     "cps.txt" using (column(0)/n_lines):2 with lines ls 2 title 'c_p analytisch'
+# WICHTIG: Für Zylinder - schließe die Kurve
+# Plotte von 0 bis 1 (nicht nur bis (n-1)/n)
+# Verwende parametrischen Modus für bessere Kontrolle
 
-# Debug-Ausgabe
-print sprintf("Detected %d lines in file", n_lines)
-print sprintf("Panel positions from 0 to %.3f", (n_lines-1.0)/n_lines)
-print sprintf("Output saved as: %s", output_filename)
+# Adaptive Darstellung
+    # Mit Markern für wenige Panels
+    plot "cps.txt" using ($0/(n_lines-0.999)):1 with linespoints ls 1 title 'Numerisch', \
+         "cps.txt" using ($0/(n_lines-0.999)):2 with lines ls 2 title 'Exakt', \
+         "cps.txt" using (1):1 every ::0::0 with points ls 1 notitle, \
+         "cps.txt" using (1):2 every ::0::0 with lines ls 2 notitle
+
+
+print sprintf("Plot erstellt: %s", output_filename)

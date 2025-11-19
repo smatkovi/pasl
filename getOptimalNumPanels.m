@@ -118,3 +118,4 @@ function [err, cp_numerical, cp_exact] = getOptimalNumPanels(numPanels)
         grid on;
     end
 end
+
