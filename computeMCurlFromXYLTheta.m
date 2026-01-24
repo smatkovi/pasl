@@ -49,12 +49,14 @@ function [M] = computeMCurlFromXYLTheta(filename, filename2)
               J(i, j) = 0.5;
           else
               I(i, j) = log(((data(j, 3) + 2*xi(i,j))^2 + 4*eta(i, j)^2)/((data(j, 3) - 2*xi(i,j))^2 + 4*eta(i, j)^2))/(4*pi);
-              J(i, j) = atan2((data(j, 3) - 2*xi(i, j)), (2*eta(i, j)))/(2*pi) + atan2((data(j, 3) + 2*xi(i, j)), (2*eta(i, j)))/(2*pi);
+              % KORRIGIERT: atan statt atan2 verwenden (laut Anleitung nur bei Panelorientierung atan2)
+              J(i, j) = atan((data(j, 3) - 2*xi(i, j)) / (2*eta(i, j)))/(2*pi) + atan((data(j, 3) + 2*xi(i, j)) / (2*eta(i, j)))/(2*pi);
           end
 
-	  M(i,j) = cos(data(i,4) - data(j,4)) * I(i,j) + sin(data(i,4) - data(j,4)) * J(i,j);
+          % KORRIGIERT: A^(n) = -sin(...)*I + cos(...)*J  (Gleichung 12)
+          % VORHER (FALSCH): M(i,j) = cos(...)*I + sin(...)*J  (das war A^(t)!)
+          M(i,j) = -sin(data(i,4) - data(j,4)) * I(i,j) + cos(data(i,4) - data(j,4)) * J(i,j);
 
       end
   end
 end  
-
