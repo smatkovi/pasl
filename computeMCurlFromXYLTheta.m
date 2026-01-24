@@ -32,7 +32,9 @@ function [M] = computeMCurlFromXYLTheta(filename, filename2)
   % Close the file
   fclose(fid);
 
-  panel = readFileData(filename2);
+  % HINWEIS: filename2 wird ignoriert - wir verwenden die Panel-Mittelpunkte
+  % aus data, nicht die Profilkoordinaten! (Gleichungen 15, 16)
+  
   xi = zeros(numLines, numLines);
   eta = zeros(numLines, numLines);
   I = zeros(numLines, numLines);
@@ -41,8 +43,10 @@ function [M] = computeMCurlFromXYLTheta(filename, filename2)
 
   for i = 1:numLines
       for j = 1:numLines
-          xi(i, j) = (panel(i, 1) - panel(j, 1))*cos(data(j, 4)) + (panel(i, 2) - panel(j, 2))*sin(data(j, 4));
-          eta(i, j) = -(panel(i, 1) - panel(j, 1))*sin(data(j, 4)) + (panel(i, 2) - panel(j, 2))*cos(data(j, 4));
+          % KORRIGIERT: Verwende Panel-Mittelpunkte data(i,1), data(i,2)
+          % statt Profilkoordinaten (Gleichungen 15, 16)
+          xi(i, j) = (data(i, 1) - data(j, 1))*cos(data(j, 4)) + (data(i, 2) - data(j, 2))*sin(data(j, 4));
+          eta(i, j) = -(data(i, 1) - data(j, 1))*sin(data(j, 4)) + (data(i, 2) - data(j, 2))*cos(data(j, 4));
 
           if i == j
               I(i, j) = 0;
